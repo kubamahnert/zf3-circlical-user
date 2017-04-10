@@ -171,8 +171,16 @@ class AccessService
      * @return bool
      * @throws GuardExpectedException
      */
-    public function requiresAuthentication(string $controllerName, string $action): bool
+    public function requiresAuthentication(string $controllerName, $action): bool
     {
+        if (! isset($action)) {
+            if (! $this->controllerDefaults[$controllerName]) {
+                return false;
+            }
+
+            return true;
+        }
+
         if (isset($this->actions[$controllerName][$action])) {
             if (!$this->actions[$controllerName][$action]) {
                 return false;
